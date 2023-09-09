@@ -1,0 +1,27 @@
+# Default values for helm_solution.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+appName: shooting-competitions
+images:
+  pullPolicy: Always
+frontend:
+  url: shooting-competitions.locallab.ds
+  image: harbor.locallab.ds/library/frontend
+  imageTag: 0.2
+backend:
+  url: api.shooting-competitions.locallab.ds
+  image: harbor.locallab.ds/library/backend
+  imageTag: 0.2
+  storage:
+    capacity: "500Mi"
+    from: "/home/daniel/volume_data/shooting_competitions_images"
+    to: "/home/media"
+database:
+  image: harbor.locallab.ds/library/database
+  imageTag: 0.2
+  storage:
+    capacity: "500Mi"
+    from: "/home/daniel/volume_data/shooting_competitions_db"
+    to: "/var/lib/postgresql/data"

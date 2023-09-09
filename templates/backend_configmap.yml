@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ .Values.appName }}-backend-configmap"
+  namespace: "{{ .Values.appName }}-ns"
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://{{ .Values.appName }}-db-service:5432/shooting_competitions
+  CORS-ALLOW-ORIGIN: "https://{{ .Values.backend.url }}"
+  MEDIA_IMAGES-STORAGE-PATH: {{ .Values.backend.storage.to }}

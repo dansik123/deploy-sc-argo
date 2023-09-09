@@ -1,0 +1,35 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "{{ .Values.appName }}-backend-cert"
+  namespace: "{{ .Values.appName }}-ns"
+spec:
+  secretName: "{{ .Values.appName }}-backend-ssl"
+  dnsNames:
+  - "{{ .Values.backend.url }}"
+  issuerRef:
+    name: ca-cluster-issuer
+    kind: ClusterIssuer
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "{{ .Values.appName }}-backend-ingress"
+  namespace: "{{ .Values.appName }}-ns"
+  annotations:
+spec:
+  tls:
+  - hosts:
+    - "{{ .Values.backend.url }}"
+    secretName: "{{ .Values.appName }}-backend-ssl"
+  rules:
+  - host: "{{ .Values.backend.url }}"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: "{{ .Values.appName }}-backend-service"
+            port:
+              number: 8888

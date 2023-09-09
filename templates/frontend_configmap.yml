@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-configmap
+  namespace: "{{ .Values.appName }}-ns"
+data:
+  VUE_APP_ROOT_URL: "https://{{ .Values.backend.url }}"

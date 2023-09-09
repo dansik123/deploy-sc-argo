@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.appName }}-db-deployment"
+  labels:
+    app: "{{ .Values.appName }}-db-deployment"
+  namespace: "{{ .Values.appName }}-ns"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "{{ .Values.appName }}-db-deployment"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Values.appName }}-db-deployment"
+    spec:
+      volumes:
+      - name: database-volume
+        persistentVolumeClaim:
+          claimName: "{{ .Values.appName }}-pvc-database"
+      containers:
+      - name: "{{ .Values.appName }}-database"
+        image: "{{ .Values.backend.image }}:{{ .Values.backend.tag }}"
+        imagePullPolicy: {{ .Values.images.pullPolicy }}
+        envFrom:
+        - secretRef:
+            name: "{{ .Values.appName }}-db-secret"
+        ports:
+          - containerPort: 5432
+        volumeMounts:
+          - mountPath: {{ .Values.backend.storage.to }}
+            name: database-volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.appName }}-db-service"
+  namespace: "{{ .Values.appName }}-ns"
+spec:
+  selector:
+    app: "{{ .Values.appName }}-db-deployment"
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
