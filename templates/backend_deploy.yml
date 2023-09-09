@@ -21,7 +21,7 @@ spec:
           claimName: "{{ .Values.appName }}-pvc"
       containers:
       - name: "{{ .Values.appName }}-backend-conainer"
-        image: "{{ .Values.backend.image }}:{{ .Values.backend.tag }}"
+        image: "{{ .Values.backend.image }}:{{ .Values.backend.imageTag }}"
         imagePullPolicy: {{ .Values.images.pullPolicy }}
         env:
         - name: SPRING_DATASOURCE_USERNAME
