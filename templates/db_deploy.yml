@@ -21,7 +21,7 @@ spec:
           claimName: "{{ .Values.appName }}-pvc-database"
       containers:
       - name: "{{ .Values.appName }}-database"
-        image: "{{ .Values.backend.image }}:{{ .Values.backend.imageTag }}"
+        image: "{{ .Values.database.image }}:{{ .Values.database.imageTag }}"
         imagePullPolicy: {{ .Values.images.pullPolicy }}
         envFrom:
         - secretRef:
@@ -29,7 +29,7 @@ spec:
         ports:
           - containerPort: 5432
         volumeMounts:
-          - mountPath: {{ .Values.backend.storage.to }}
+          - mountPath: {{ .Values.database.storage.to }}
             name: database-volume
 ---
 apiVersion: v1
