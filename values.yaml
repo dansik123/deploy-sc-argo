@@ -20,7 +20,7 @@ backend:
     to: "/home/media"
 database:
   image: harbor.locallab.ds/library/database
-  imageTag: 0.2
+  imageTag: 0.1
   storage:
     capacity: "500Mi"
     from: "/home/daniel/volume_data/shooting_competitions_db"
