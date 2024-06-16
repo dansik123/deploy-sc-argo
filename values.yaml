@@ -13,7 +13,7 @@ frontend:
 backend:
   url: api.shooting-competitions.locallab.ds
   image: harbor.locallab.ds/library/backend
-  imageTag: 0.2
+  imageTag: debug
   storage:
     capacity: "500Mi"
     from: "/home/daniel/volume_data/shooting_competitions_images"
