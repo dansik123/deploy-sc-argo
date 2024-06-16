@@ -19,8 +19,8 @@ backend:
     from: "/home/daniel/volume_data/shooting_competitions_images"
     to: "/home/media"
 database:
-  image: harbor.locallab.ds/library/postgres
-  imageTag: base
+  image: harbor.locallab.ds/library/database
+  imageTag: 0.1
   storage:
     capacity: "500Mi"
     from: "/home/daniel/volume_data/shooting_competitions_db"
