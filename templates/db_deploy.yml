@@ -35,7 +35,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ .Values.appName }}-db-service"
+  name: "{{ .Values.appName }}-db-service-local"
   namespace: "{{ .Values.appName }}-ns"
 spec:
   selector:
@@ -44,3 +44,19 @@ spec:
     - protocol: TCP
       port: 5432
       targetPort: 5432
+---
+{{ if .Values.database.exernal.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.appName }}-db-service-external"
+  namespace: "{{ .Values.appName }}-ns"
+spec:
+  selector:
+    app: "{{ .Values.appName }}-db-deployment"
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8878
+      targetPort: 5432
+{{ end }}

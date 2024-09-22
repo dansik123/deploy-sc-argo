@@ -25,3 +25,6 @@ database:
     capacity: "500Mi"
     from: "/home/daniel/volume_data/shooting_competitions_db"
     to: "/var/lib/postgresql/data"
+  external:
+    enabled: false
+    #url: db.shooting-competitions.locallab.ds
