@@ -26,5 +26,5 @@ database:
     from: "/home/daniel/volume_data/shooting_competitions_db"
     to: "/var/lib/postgresql/data"
   external:
-    enabled: false
-    #url: db.shooting-competitions.locallab.ds
+    enabled: true
+    url: db.shooting-competitions.locallab.ds
