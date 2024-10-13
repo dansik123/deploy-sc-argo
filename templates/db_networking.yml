@@ -1,4 +1,4 @@
-{{ if .Values.database.exernal.enabled }}
+{{ if .Values.database.external.enabled }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -7,7 +7,7 @@ metadata:
 spec:
   secretName: "{{ .Values.appName }}-db-ssl"
   dnsNames:
-  - "{{ .Values.database.exernal.url }}"
+  - "{{ .Values.database.external.url }}"
   issuerRef:
     name: ca-cluster-issuer
     kind: ClusterIssuer
@@ -21,10 +21,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "{{ .Values.database.exernal.url }}"
+    - "{{ .Values.database.external.url }}"
     secretName: "{{ .Values.appName }}-db-ssl"
   rules:
-  - host: "{{ .Values.database.exernal.url }}"
+  - host: "{{ .Values.database.external.url }}"
     http:
       paths:
       - pathType: Prefix

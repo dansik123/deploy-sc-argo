@@ -45,7 +45,7 @@ spec:
       port: 5432
       targetPort: 5432
 ---
-{{ if .Values.database.exernal.enabled }}
+{{ if .Values.database.external.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
