@@ -13,6 +13,7 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: {{ .Values.database.storage.from }}
+  persistentVolumeReclaimPolicy: Retain
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
