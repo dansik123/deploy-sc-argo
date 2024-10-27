@@ -20,7 +20,7 @@ backend:
     to: "/home/media"
 database:
   image: harbor.locallab.ds/library/postgres
-  imageTag: base
+  imageTag: alpine3.20
   storage:
     capacity: "500Mi"
     from: "/home/daniel/volume_data/shooting_competitions_db"
