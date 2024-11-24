@@ -12,7 +12,7 @@ spec:
     storage: {{ .Values.database.storage.replica1.capacity }}
   accessModes:
     - ReadWriteOnce
-  storageClassName: database-storage-class
+  storageClassName: storage-replica-class
   hostPath:
     path: {{ .Values.database.storage.replica1.from }}
   persistentVolumeReclaimPolicy: Retain

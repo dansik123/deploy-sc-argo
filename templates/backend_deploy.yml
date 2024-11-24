@@ -18,7 +18,7 @@ spec:
       volumes:
       - name: "{{ .Values.appName }}-media-volume"
         persistentVolumeClaim:
-          claimName: "{{ .Values.appName }}-pvc"
+          claimName: "{{ .Values.appName }}-images-pvc"
       containers:
       - name: "{{ .Values.appName }}-backend-conainer"
         image: "{{ .Values.backend.image }}:{{ .Values.backend.imageTag }}"
