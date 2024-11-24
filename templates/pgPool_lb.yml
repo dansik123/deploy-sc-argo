@@ -22,7 +22,7 @@ spec:
         - containerPort: {{ .Values.database.accessPort }}
         env:
         - name: PGPOOL_BACKEND_NODES
-          value: "0:{{ .Values.appName }}-db-master:{{ .Values.database.accessPort }},1:{{ .Values.appName }}-db-replica-0:{{ .Values.database.accessPort }},2:{{ .Values.appName }}-db-replica-1:{{ .Values.database.accessPort }}"
+          value: "0:{{ .Values.appName }}-db-master-service:{{ .Values.database.accessPort }},1:{{ .Values.appName }}-db-replicas-service:{{ .Values.database.accessPort }}"
         - name: PGPOOL_SR_CHECK_USER
           valueFrom:
             secretKeyRef:

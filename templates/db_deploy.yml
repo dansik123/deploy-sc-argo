@@ -59,6 +59,21 @@ spec:
           storage: {{ .Values.database.storage.master.capacity }}
       storageClassName: storage-master-class
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.appName }}-db-master-service"
+  namespace: "{{ .Values.appName }}-ns"
+spec:
+  selector:
+    app: "{{ .Values.appName }}-db-app"
+    role: master
+  ports:
+    - protocol: TCP
+      port: {{ .Values.database.accessPort }}
+      targetPort: {{ .Values.database.accessPort }}
+  clusterIP: None
+---
 ### replica statefull sets
 apiVersion: apps/v1
 kind: StatefulSet
@@ -103,7 +118,7 @@ spec:
             name: "{{ .Values.appName }}-db-replication-secret"
         env:
           - name: POSTGRES_MASTER_HOST
-            value: "{{ .Values.appName }}-db-master"
+            value: "{{ .Values.appName }}-db-master-service"
         ports:
           - containerPort: {{ .Values.database.accessPort }}
         volumeMounts:
@@ -129,3 +144,18 @@ spec:
         requests:
           storage: {{ .Values.database.storage.master.capacity }}
       storageClassName: storage-replica-class
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.appName }}-db-replicas-service"
+  namespace: "{{ .Values.appName }}-ns"
+spec:
+  selector:
+    app: "{{ .Values.appName }}-db-app"
+    role: replica
+  ports:
+    - protocol: TCP
+      port: {{ .Values.database.accessPort }}
+      targetPort: {{ .Values.database.accessPort }}
+  clusterIP: None
