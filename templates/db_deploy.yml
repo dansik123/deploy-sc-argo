@@ -107,8 +107,7 @@ spec:
             name: database-replica-data
           - mountPath: /script
             name: script
-            readOnly: true
-        command: ["/bin/bash", "/script/replication-init.sh"]
+        command: ["sh", "-c", "/script/replication-init.sh"]
       volumes:
       - name: script
         configMap:
