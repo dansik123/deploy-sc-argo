@@ -24,11 +24,11 @@ spec:
       - name: "{{ .Values.appName }}-database"
         image: "{{ .Values.database.image }}:{{ .Values.database.imageTag }}"
         imagePullPolicy: {{ .Values.images.pullPolicy }}
-        command: ["/bin/sh", "-c"]
+        command: ["/bin/bash", "-c"]
         args:
           - |
-            mkdir -p "$(dirname "/etc/postgresql/pg_hba.conf")"
-            echo "$REPLICATION_ACCESS" > /etc/postgresql/pg_hba.conf
+            mkdir -p "$(dirname "/etc/postgresql/pg_hba.conf")" &&
+            echo "$REPLICATION_ACCESS" > /etc/postgresql/pg_hba.conf &&
             exec postgres
         env:
           - name: POSTGRES_INITDB_ARGS
