@@ -11,6 +11,9 @@ data:
     #Clear any old data
     rm -rf /var/lib/postgresql/data/*
 
+    #Change to postgres
+    su postgres
+
     #Initialize replication
     pg_basebackup -h ${POSTGRES_MASTER_HOST} -D /var/lib/postgresql/data -U ${POSTGRES_REPLICATOR_USER} --password --wal-method=stream
 
