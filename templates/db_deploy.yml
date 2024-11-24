@@ -27,7 +27,8 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
           - |
-            echo "$REPLICATION_ACCESS" >> /etc/postgresql/pg_hba.conf && 
+            mkdir -p "$(dirname "/etc/postgresql/pg_hba.conf")"
+            echo "$REPLICATION_ACCESS" > /etc/postgresql/pg_hba.conf
             exec postgres
         env:
           - name: POSTGRES_INITDB_ARGS
