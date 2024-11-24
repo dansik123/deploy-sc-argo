@@ -32,7 +32,7 @@ spec:
     - ReadWriteOnce
   storageClassName: storage-replica-class
   hostPath:
-    path: {{ .Values.database.storage.replica1.from }}
+    path: {{ .Values.database.storage.replica2.from }}
   persistentVolumeReclaimPolicy: Retain
 ---
 ####################### Master volume
