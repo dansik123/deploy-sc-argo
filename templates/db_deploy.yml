@@ -28,7 +28,7 @@ spec:
         args:
           - |
             mkdir -p "$(dirname '/etc/postgresql/pg_hba.conf')" &&
-            echo "host ${POSTGRES_DB} ${POSTGRES_REPLICATOR_USER} 0.0.0.0/0 md5" > /etc/postgresql/pg_hba.conf &&
+            echo "host    ${POSTGRES_DB}    ${POSTGRES_REPLICATOR_USER}    0.0.0.0/0    md5" > /etc/postgresql/pg_hba.conf &&
             cp /script/postgresql.conf /etc/postgresql/postgresql.conf &&
             chown -R postgres:postgres /etc/postgresql &&
             chmod -R 600 /etc/postgresql &&
