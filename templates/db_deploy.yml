@@ -29,7 +29,7 @@ spec:
           - |
             mkdir -p "$(dirname "/etc/postgresql/pg_hba.conf")" &&
             echo "$REPLICATION_ACCESS" > /etc/postgresql/pg_hba.conf &&
-            exec postgres
+            su -c "exec postgres" -s /bin/bash postgres
         env:
           - name: POSTGRES_INITDB_ARGS
             value: "--wal-level=replica --max-wal-senders=3 --wal-keep-size=64"
