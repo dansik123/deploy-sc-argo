@@ -24,6 +24,9 @@ spec:
       - name: "{{ .Values.appName }}-database"
         image: "{{ .Values.database.image }}:{{ .Values.database.imageTag }}"
         imagePullPolicy: {{ .Values.images.pullPolicy }}
+        env:
+          - name: POSTGRES_INITDB_ARGS
+            value: "--wal-level=replica --max-wal-senders=3 --wal-keep-size=64"
         envFrom:
         - secretRef:
             name: "{{ .Values.appName }}-db-secret"
@@ -34,9 +37,6 @@ spec:
         volumeMounts:
           - mountPath: {{ .Values.database.storage.volumeTo }}
             name: database-master-data
-          - mountPath: /etc/postgresql/postgresql.conf
-            name: postgres-config-files
-            subPath: postgresql.conf
           - mountPath: /etc/postgresql/pg_hba.conf
             name: postgres-config-files
             subPath: pg_hba.conf
