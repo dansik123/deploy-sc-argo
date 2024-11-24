@@ -26,13 +26,13 @@ spec:
         imagePullPolicy: {{ .Values.images.pullPolicy }}
         envFrom:
         - secretRef:
-          name: "{{ .Values.appName }}-db-secret"
+            name: "{{ .Values.appName }}-db-secret"
         - secretRef:
-          name: "{{ .Values.appName }}-db-replication-secret"
+            name: "{{ .Values.appName }}-db-replication-secret"
         ports:
           - containerPort: {{ .Values.database.accessPort }}
         volumeMounts:
-          - mountPath: {{ .Values.database.storage.to }}
+          - mountPath: {{ .Values.database.storage.volumeTo }}
             name: database-master-data
           - mountPath: /etc/postgresql/postgresql.conf
             name: postgres-master-config
@@ -94,16 +94,16 @@ spec:
         imagePullPolicy: {{ .Values.images.pullPolicy }}
         envFrom:
         - secretRef:
-          name: "{{ .Values.appName }}-db-secret"
+            name: "{{ .Values.appName }}-db-secret"
         - secretRef:
-          name: "{{ .Values.appName }}-db-replication-secret"
+            name: "{{ .Values.appName }}-db-replication-secret"
         env:
           - name: POSTGRES_MASTER_HOST
             value: "{{ .Values.appName }}-db-master"
         ports:
           - containerPort: {{ .Values.database.accessPort }}
         volumeMounts:
-          - mountPath: {{ .Values.database.storage.to }}
+          - mountPath: {{ .Values.database.storage.volumeTo }}
             name: database-replica-data
           - mountPath: /script
             name: script
