@@ -17,24 +17,6 @@ spec:
     path: {{ .Values.database.storage.replica1.from }}
   persistentVolumeReclaimPolicy: Retain
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  namespace: "{{ .Values.appName }}-ns"
-  name: "{{ .Values.appName }}-pv-replica2"
-  labels:
-    app: "{{ .Values.appName }}-db-app"
-    role: replica
-spec:
-  capacity:
-    storage: {{ .Values.database.storage.replica2.capacity }}
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: storage-replica-class
-  hostPath:
-    path: {{ .Values.database.storage.replica2.from }}
-  persistentVolumeReclaimPolicy: Retain
----
 ####################### Master volume
 apiVersion: v1
 kind: PersistentVolume
