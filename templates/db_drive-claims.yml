@@ -21,7 +21,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   namespace: "{{ .Values.appName }}-ns"
-  name: "{{ .Values.appName }}-pv-replica1"
+  name: "{{ .Values.appName }}-pv-replica2"
   labels:
     app: "{{ .Values.appName }}-db-app"
     role: replica
