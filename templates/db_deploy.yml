@@ -28,16 +28,11 @@ spec:
         args:
           - |
             mkdir -p "$(dirname "/etc/postgresql/pg_hba.conf")" &&
-            echo "$REPLICATION_ACCESS" > /etc/postgresql/pg_hba.conf &&
+            echo "host ${POSTGRES_DB} ${POSTGRES_REPLICATOR_USER} 0.0.0.0/0 md5" > /etc/postgresql/pg_hba.conf &&
             su -c "exec postgres" -s /bin/bash postgres
         env:
           - name: POSTGRES_INITDB_ARGS
             value: "--wal-level=replica --max-wal-senders=3 --wal-keep-size=64"
-          - name: REPLICATION_ACCESS
-            valueFrom:
-              configMapKeyRef:
-                name: postgres-master-configs
-                key: PG_HBA_LINE
         envFrom:
         - secretRef:
             name: "{{ .Values.appName }}-db-secret"
