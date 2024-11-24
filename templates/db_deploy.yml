@@ -29,6 +29,7 @@ spec:
           - |
             mkdir -p "$(dirname '/etc/postgresql/pg_hba.conf')" &&
             echo "host ${POSTGRES_DB} ${POSTGRES_REPLICATOR_USER} 0.0.0.0/0 md5" > /etc/postgresql/pg_hba.conf &&
+            cp /scrips/postgresql.conf /etc/postgresql/postgresql.conf &&
             chown -R postgres:postgres /etc/postgresql &&
             chmod -R 600 /etc/postgresql &&
             su -c "exec postgres" -s /bin/bash postgres
@@ -42,7 +43,7 @@ spec:
         volumeMounts:
           - mountPath: {{ .Values.database.storage.volumeTo }}
             name: database-master-data
-          - mountPath: /etc/postgresql/postgresql.conf
+          - mountPath: /scripts/postgresql.conf
             name: postgres-config-files
             subPath: postgresql.conf
           - mountPath: /docker-entrypoint-initdb.d
