@@ -42,7 +42,7 @@ metadata:
   name: "{{ .Values.appName }}-pv-master"
   labels:
     app: "{{ .Values.appName }}-db-app"
-    role: replica
+    role: master
   namespace: "{{ .Values.appName }}-ns"
 spec:
   storageClassName: storage-master-class
