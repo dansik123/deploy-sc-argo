@@ -41,9 +41,6 @@ spec:
           value: "20"
         - name: PGPOOL_HEALTH_CHECK_RETRY
           value: "3"
-        envFrom:
-          - secretRef:
-            name: "{{ .Values.appName }}-db-secret"
 
 ---
 apiVersion: v1
