@@ -8,16 +8,16 @@ data:
     #!/bin/bash
     set -e
 
-    -- Clear any old data
+    #Clear any old data
     rm -rf /var/lib/postgresql/data/*
 
-    -- Initialize replication
+    #Initialize replication
     pg_basebackup -h ${POSTGRES_MASTER_HOST} -D /var/lib/postgresql/data -U ${POSTGRES_REPLICATOR_USER} --password --wal-method=stream
 
-    -- Configure recovery
+    #Configure recovery
     echo "standby_mode = 'on'" > /var/lib/postgresql/data/postgresql.auto.conf
     echo "primary_conninfo = 'host=${POSTGRES_MASTER_HOST} port=5432 user=${POSTGRES_REPLICATOR_USER} password=${POSTGRES_REPLICATOR_PASSWORD}'" >> /var/lib/postgresql/data/postgresql.auto.conf
     echo "recovery_target_timeline = 'latest'" >> /var/lib/postgresql/data/postgresql.auto.conf
 
-    -- Start PostgreSQL
+    #Start PostgreSQL
     exec postgres
