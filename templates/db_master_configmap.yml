@@ -4,9 +4,5 @@ metadata:
   name: postgres-master-configs
   namespace: "{{ .Values.appName }}-ns"
 data:
-  postgresql.conf: |
-    wal_level = replica
-    max_wal_senders = 3
-    wal_keep_size = 64MB
   pg_hba.conf: |
     host ${POSTGRES_DB} ${POSTGRES_REPLICATOR_USER} 0.0.0.0/0 md5
