@@ -84,7 +84,7 @@ spec:
       initContainers:
       - name: make-script-executable
         image: harbor.locallab.ds/library/busybox:1.37-glibc
-        command: ["sh", "-c", "chmod +x /scripts/replication-init.sh"]
+        command: ["sh", "-c", "chmod +x /script/replication-init.sh"]
         volumeMounts:
         - name: script
           mountPath: /script
