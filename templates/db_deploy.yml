@@ -35,17 +35,17 @@ spec:
           - mountPath: {{ .Values.database.storage.volumeTo }}
             name: database-master-data
           - mountPath: /etc/postgresql/postgresql.conf
-            name: postgres-master-config
+            name: postgres-config-files
             subPath: postgresql.conf
           - mountPath: /etc/postgresql/pg_hba.conf
-            name: postgres-master-config
+            name: postgres-config-files
             subPath: pg_hba.conf
           - mountPath: /docker-entrypoint-initdb.d
             name: init-scripts
       volumes:
-        - name: postgres-master-config
+        - name: postgres-config-files
           configMap:
-            name: postgres-master-config
+            name: postgres-master-configs
         - name: init-scripts
           configMap:
             name: postgres-master-init-config

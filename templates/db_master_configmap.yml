@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-master-config
+  name: postgres-master-configs
   namespace: "{{ .Values.appName }}-ns"
 data:
   postgresql.conf: |
