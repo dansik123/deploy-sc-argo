@@ -70,7 +70,7 @@ metadata:
   namespace: "{{ .Values.appName }}-ns"
 spec:
   serviceName: "{{ .Values.appName }}-db-replica"
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: "{{ .Values.appName }}-db-app"
