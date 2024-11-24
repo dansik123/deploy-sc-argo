@@ -84,10 +84,14 @@ spec:
       initContainers:
       - name: make-script-executable
         image: harbor.locallab.ds/library/busybox:1.37-glibc
-        command: ["sh", "-c", "chmod +x /script/replication-init.sh"]
+        command: ["sh", "-c"]
+        args:
+          - cp /script/replication-init.sh /scripts/replication-init.sh && chmod +x /scripts/replication-init.sh
         volumeMounts:
         - name: script
           mountPath: /script
+        - name: script-writable
+          mountPath: /scripts
       containers:
       - name: "{{ .Values.appName }}-database"
         image: "{{ .Values.database.image }}:{{ .Values.database.imageTag }}"
@@ -105,13 +109,17 @@ spec:
         volumeMounts:
           - mountPath: {{ .Values.database.storage.volumeTo }}
             name: database-replica-data
-          - mountPath: /script
-            name: script
-        command: ["sh", "-c", "/script/replication-init.sh"]
+          - mountPath: /scripts
+            name: script-writable
+        command: ["/bin/bash", "-c"]
+        args:
+          - /scripts/replication-init.sh
       volumes:
       - name: script
         configMap:
           name: postgres-replication-script
+      - name: script-writable
+        emptyDir: {}
   volumeClaimTemplates:
   - metadata:
       name: database-replica-data
