@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: "{{ .Values.appName }}-pvc"
+  name: "{{ .Values.appName }}-images-pv"
   labels:
     type: local
   namespace: "{{ .Values.appName }}-ns"
 spec:
-  storageClassName: manual
+  storageClassName: app-images-class
   capacity:
     storage: {{ .Values.backend.storage.capacity }}
   accessModes:
@@ -18,9 +18,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   namespace: "{{ .Values.appName }}-ns"
-  name: "{{ .Values.appName }}-pvc"
+  name: "{{ .Values.appName }}-images-pvc"
 spec:
-  storageClassName: manual
+  storageClassName: app-images-class
   accessModes:
     - ReadWriteOnce
   resources:
