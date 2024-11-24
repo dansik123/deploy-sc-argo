@@ -11,9 +11,6 @@ data:
     #Clear any old data
     rm -rf /var/lib/postgresql/data/*
 
-    #Change to postgres
-    su postgres
-
     #Initialize replication
     pg_basebackup -h ${POSTGRES_MASTER_HOST} -D /var/lib/postgresql/data -U ${POSTGRES_REPLICATOR_USER} --password --wal-method=stream
 
@@ -23,4 +20,4 @@ data:
     echo "recovery_target_timeline = 'latest'" >> /var/lib/postgresql/data/postgresql.auto.conf
 
     #Start PostgreSQL
-    exec postgres
+    su -c "exec postgres" -s /bin/bash postgres
