@@ -28,7 +28,7 @@ spec:
         - secretRef:
           name: "{{ .Values.appName }}-db-secret"
         - secretRef:
-          name: '{{ .Values.appName }}-db-replication-secret'
+          name: "{{ .Values.appName }}-db-replication-secret"
         ports:
           - containerPort: {{ .Values.database.accessPort }}
         volumeMounts:
@@ -96,7 +96,7 @@ spec:
         - secretRef:
           name: "{{ .Values.appName }}-db-secret"
         - secretRef:
-          name: '{{ .Values.appName }}-db-replication-secret'
+          name: "{{ .Values.appName }}-db-replication-secret"
         env:
           - name: POSTGRES_MASTER_HOST
             value: "{{ .Values.appName }}-db-master"
