@@ -29,6 +29,8 @@ spec:
           - |
             mkdir -p "$(dirname '/etc/postgresql/pg_hba.conf')" &&
             echo "host ${POSTGRES_DB} ${POSTGRES_REPLICATOR_USER} 0.0.0.0/0 md5" > /etc/postgresql/pg_hba.conf &&
+            chown postgres:postgres /etc/postgresql/pg_hba.conf &&
+            chmod 600 /etc/postgresql/pg_hba.conf &&
             su -c "exec postgres" -s /bin/bash postgres
         env:
           - name: POSTGRES_INITDB_ARGS
