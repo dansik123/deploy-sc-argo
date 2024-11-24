@@ -34,7 +34,11 @@ spec:
             secretKeyRef:
               name: "{{ .Values.appName }}-db-secret"
               key: POSTGRES_PASSWORD
-
+        envFrom:
+          - configMapRef:
+              name: "{{ .Values.appName }}-backend-configmap"
+          - secretRef:
+              name: "{{ .Values.appName }}-backend-secret"
         ports:
           - containerPort: 8080
         volumeMounts:
