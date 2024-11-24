@@ -47,7 +47,7 @@ metadata:
 spec:
   storageClassName: storage-master-class
   capacity:
-    storage: {{ .Values.database.storage.capacity }}
+    storage: {{ .Values.database.storage.master.capacity }}
   accessModes:
     - ReadWriteOnce
   hostPath:
