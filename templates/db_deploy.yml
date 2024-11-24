@@ -38,9 +38,9 @@ spec:
                 name: postgres-master-configs
                 key: PG_HBA_LINE
         envFrom:
-          - secretRef:
+        - secretRef:
             name: "{{ .Values.appName }}-db-secret"
-          - secretRef:
+        - secretRef:
             name: "{{ .Values.appName }}-db-replication-secret"
         ports:
           - containerPort: {{ .Values.database.accessPort }}
