@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-master-init-config
+  namespace: "{{ .Values.appName }}-ns"
+data:
+  01--init-create-replicator.sql: |
+    -- Create the replicator user with replication privileges
+    DO $$
+    BEGIN
+      IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'replicator') THEN
+        CREATE ROLE ${POSTGRES_REPLICATOR_USER} WITH REPLICATION LOGIN PASSWORD ${POSTGRES_REPLICATOR_PASSWORD};
+      END IF;
+    END;
+    $$;

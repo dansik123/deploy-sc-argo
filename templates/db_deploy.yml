@@ -1,62 +1,124 @@
+# Master database stateful set
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: "{{ .Values.appName }}-db-deployment"
+  name: "{{ .Values.appName }}-db-master"
   labels:
-    app: "{{ .Values.appName }}-db-deployment"
+    app: "{{ .Values.appName }}-db-app"
+    role: master
   namespace: "{{ .Values.appName }}-ns"
 spec:
+  serviceName: "{{ .Values.appName }}-db-master"
   replicas: 1
   selector:
     matchLabels:
-      app: "{{ .Values.appName }}-db-deployment"
+      app: "{{ .Values.appName }}-db-app"
+      role: master
   template:
     metadata:
       labels:
-        app: "{{ .Values.appName }}-db-deployment"
+        app: "{{ .Values.appName }}-db-app"
+        role: master
     spec:
-      volumes:
-      - name: database-volume
-        persistentVolumeClaim:
-          claimName: "{{ .Values.appName }}-pvc-database"
       containers:
       - name: "{{ .Values.appName }}-database"
         image: "{{ .Values.database.image }}:{{ .Values.database.imageTag }}"
         imagePullPolicy: {{ .Values.images.pullPolicy }}
         envFrom:
         - secretRef:
-            name: "{{ .Values.appName }}-db-secret"
+          name: "{{ .Values.appName }}-db-secret"
+        - secretRef:
+          name: '{{ .Values.appName }}-db-replication-secret'
         ports:
-          - containerPort: 5432
+          - containerPort: {{ .Values.database.accessPort }}
         volumeMounts:
           - mountPath: {{ .Values.database.storage.to }}
-            name: database-volume
+            name: database-master-data
+          - mountPath: /etc/postgresql/postgresql.conf
+            name: postgres-master-config
+            subPath: postgresql.conf
+          - mountPath: /etc/postgresql/pg_hba.conf
+            name: postgres-master-config
+            subPath: pg_hba.conf
+          - mountPath: /docker-entrypoint-initdb.d
+            name: init-scripts
+      volumes:
+        - name: postgres-master-config
+          configMap:
+            name: postgres-master-config
+        - name: init-scripts
+          configMap:
+            name: postgres-master-init-config
+  volumeClaimTemplates:
+  - metadata:
+      name: database-master-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: {{ .Values.database.storage.master.capacity }}
+      storageClassName: storage-master-class
 ---
-apiVersion: v1
-kind: Service
+### replica statefull sets
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
-  name: "{{ .Values.appName }}-db-service-local"
+  name: "{{ .Values.appName }}-db-replica"
+  labels:
+    app: "{{ .Values.appName }}-db-app"
+    role: replica
   namespace: "{{ .Values.appName }}-ns"
 spec:
+  serviceName: "{{ .Values.appName }}-db-replica"
+  replicas: 2
   selector:
-    app: "{{ .Values.appName }}-db-deployment"
-  ports:
-    - protocol: TCP
-      port: 5432
-      targetPort: 5432
----
-{{ if .Values.database.external.enabled }}
-apiVersion: v1
-kind: Service
-metadata:
-  name: "{{ .Values.appName }}-db-service-external"
-  namespace: "{{ .Values.appName }}-ns"
-spec:
-  selector:
-    app: "{{ .Values.appName }}-db-deployment"
-  type: NodePort
-  ports:
-    - protocol: TCP
-      port: 8878
-      targetPort: 5432
-{{ end }}
+    matchLabels:
+      app: "{{ .Values.appName }}-db-app"
+      role: replica
+  template:
+    metadata:
+      labels:
+        app: "{{ .Values.appName }}-db-app"
+        role: replica
+    spec:
+      initContainers:
+      - name: make-script-executable
+        image: harbor.locallab.ds/library/busybox:1.37-glibc
+        command: ["sh", "-c", "chmod +x /scripts/replication-init.sh"]
+        volumeMounts:
+        - name: script
+          mountPath: /script
+      containers:
+      - name: "{{ .Values.appName }}-database"
+        image: "{{ .Values.database.image }}:{{ .Values.database.imageTag }}"
+        imagePullPolicy: {{ .Values.images.pullPolicy }}
+        envFrom:
+        - secretRef:
+          name: "{{ .Values.appName }}-db-secret"
+        - secretRef:
+          name: '{{ .Values.appName }}-db-replication-secret'
+        env:
+          - name: POSTGRES_MASTER_HOST
+            value: "{{ .Values.appName }}-db-master"
+        ports:
+          - containerPort: {{ .Values.database.accessPort }}
+        volumeMounts:
+          - mountPath: {{ .Values.database.storage.to }}
+            name: database-replica-data
+          - mountPath: /script
+            name: script
+            readOnly: true
+        command: ["/bin/bash", "/script/replication-init.sh"]
+      volumes:
+      - name: script
+        configMap:
+          name: postgres-replication-script
+  volumeClaimTemplates:
+  - metadata:
+      name: database-replica-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: {{ .Values.database.storage.master.capacity }}
+      storageClassName: storage-replica-class

@@ -21,10 +21,15 @@ backend:
 database:
   image: harbor.locallab.ds/library/postgres
   imageTag: alpine3.20
+  accessPort: 5432
   storage:
-    capacity: "500Mi"
-    from: "/home/daniel/volume_data/shooting_competitions_db"
-    to: "/var/lib/postgresql/data"
-  external:
-    enabled: true
-    url: db.shooting-competitions.locallab.ds
+    volumeTo: "/var/lib/postgresql/data"
+    master:
+      capacity: "500Mi"
+      from: "/home/daniel/volume_data/shooting_competitions_db"
+    replica1:
+      capacity: "500Mi"
+      from: "/home/daniel/volume_data/shooting_competitions_replica1_db"
+    replica2:
+      capacity: "500Mi"
+      from: "/home/daniel/volume_data/shooting_competitions_replica2_db"

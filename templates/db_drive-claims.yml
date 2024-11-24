@@ -1,29 +1,56 @@
+################## Replica volumes
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: "{{ .Values.appName }}-pvc-database"
+  namespace: "{{ .Values.appName }}-ns"
+  name: "{{ .Values.appName }}-pv-replica1"
   labels:
-    type: local
+    app: "{{ .Values.appName }}-db-app"
+    role: replica
+spec:
+  capacity:
+    storage: {{ .Values.database.storage.replica1.capacity }}
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: database-storage-class
+  hostPath:
+    path: {{ .Values.database.storage.replica1.from }}
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: "{{ .Values.appName }}-ns"
+  name: "{{ .Values.appName }}-pv-replica1"
+  labels:
+    app: "{{ .Values.appName }}-db-app"
+    role: replica
+spec:
+  capacity:
+    storage: {{ .Values.database.storage.replica2.capacity }}
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: storage-replica-class
+  hostPath:
+    path: {{ .Values.database.storage.replica1.from }}
+  persistentVolumeReclaimPolicy: Retain
+---
+####################### Master volume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: "{{ .Values.appName }}-pv-master"
+  labels:
+    app: "{{ .Values.appName }}-db-app"
+    role: replica
   namespace: "{{ .Values.appName }}-ns"
 spec:
-  storageClassName: manual
+  storageClassName: storage-master-class
   capacity:
     storage: {{ .Values.database.storage.capacity }}
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: {{ .Values.database.storage.from }}
+    path: {{ .Values.database.storage.master.from }}
   persistentVolumeReclaimPolicy: Retain
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  namespace: "{{ .Values.appName }}-ns"
-  name: "{{ .Values.appName }}-pvc-database"
-spec:
-  storageClassName: manual
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: {{ .Values.database.storage.capacity }}

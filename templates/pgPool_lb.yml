@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: "{{ .Values.appName }}-ns"
+  name: pgpool
+  labels:
+    app: pgpool
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgpool
+  template:
+    metadata:
+      labels:
+        app: pgpool
+    spec:
+      containers:
+      - name: pgpool
+        image: harbor.locallab.ds/library/pgpool:4.5.4
+        ports:
+        - containerPort: {{ .Values.database.accessPort }}
+        env:
+        - name: PGPOOL_BACKEND_NODES
+          value: "0:{{ .Values.appName }}-db-master:{{ .Values.database.accessPort }},1:{{ .Values.appName }}-db-replica-0:{{ .Values.database.accessPort }},2:{{ .Values.appName }}-db-replica-1:{{ .Values.database.accessPort }}"
+        - name: PGPOOL_SR_CHECK_USER
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.appName }}-db-secret"
+              key: POSTGRES_USER
+        - name: PGPOOL_SR_CHECK_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.appName }}-db-secret"
+              key: POSTGRES_PASSWORD
+        - name: PGPOOL_ENABLE_LOAD_BALANCING
+          value: "true"
+        - name: PGPOOL_HEALTH_CHECK_PERIOD
+          value: "10"
+        - name: PGPOOL_HEALTH_CHECK_TIMEOUT
+          value: "20"
+        - name: PGPOOL_HEALTH_CHECK_RETRY
+          value: "3"
+        envFrom:
+          - secretRef:
+            name: "{{ .Values.appName }}-backend-secret"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: "{{ .Values.appName }}-ns"
+  name: pgpool
+  labels:
+    app: pgpool
+spec:
+  ports:
+  - port: {{ .Values.database.accessPort }}
+    targetPort: {{ .Values.database.accessPort }}
+  selector:
+    app: pgpool
+  type: ClusterIP
