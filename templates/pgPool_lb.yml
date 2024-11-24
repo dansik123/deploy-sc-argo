@@ -43,7 +43,7 @@ spec:
           value: "3"
         envFrom:
           - secretRef:
-            name: "{{ .Values.appName }}-backend-secret"
+            name: "{{ .Values.appName }}-db-secret"
 
 ---
 apiVersion: v1
