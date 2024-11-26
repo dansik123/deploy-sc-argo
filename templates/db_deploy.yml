@@ -29,11 +29,10 @@ spec:
           - |
             mkdir -p "$(dirname '/etc/postgresql/pg_hba.conf')" &&
             echo "host    replication    ${POSTGRES_REPLICATOR_USER}    0.0.0.0/0    md5" > /etc/postgresql/pg_hba.conf &&
+            echo "local   all             all                                     trust" >> /etc/postgresql/pg_hba.conf &&
             cp /script/postgresql.conf /etc/postgresql/postgresql.conf &&
-            chown postgres:postgres /etc/postgresql/postgresql.conf &&
-            chmod 600 /etc/postgresql/postgresql.conf &&
-            chown postgres:postgres /etc/postgresql/pg_hba.conf &&
-            chmod 600 /etc/postgresql/pg_hba.conf &&
+            chown -R postgres:postgres /etc/postgresql &&
+            chmod -R 600 /etc/postgresql &&
             chown -R postgres:postgres /var/lib/postgresql/data &&
             chmod -R 750 /var/lib/postgresql/data &&
             su -c "exec postgres -c 'config_file=/etc/postgresql/postgresql.conf'" -s /bin/bash postgres
