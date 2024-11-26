@@ -32,7 +32,7 @@ spec:
             cp /script/postgresql.conf /etc/postgresql/postgresql.conf &&
             chown -R postgres:postgres /etc/postgresql &&
             chmod -R 600 /etc/postgresql &&
-            su -c "exec postgres -c 'config_file='/etc/postgresql/postgresql.conf" -s /bin/bash
+            su -c "exec postgres -c 'config_file=/etc/postgresql/postgresql.conf'" -s /bin/bash
         envFrom:
         - secretRef:
             name: "{{ .Values.appName }}-db-secret"
