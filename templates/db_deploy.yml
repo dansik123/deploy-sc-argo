@@ -82,7 +82,6 @@ spec:
     - protocol: TCP
       port: {{ .Values.database.accessPort }}
       targetPort: {{ .Values.database.accessPort }}
-  clusterIP: None
 ---
 ### replica statefull sets
 apiVersion: apps/v1
@@ -168,4 +167,3 @@ spec:
     - protocol: TCP
       port: {{ .Values.database.accessPort }}
       targetPort: {{ .Values.database.accessPort }}
-  clusterIP: None
