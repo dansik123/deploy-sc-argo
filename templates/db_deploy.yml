@@ -35,6 +35,7 @@ spec:
             chown postgres:postgres /etc/postgresql/pg_hba.conf &&
             chmod 600 /etc/postgresql/pg_hba.conf &&
             chown postgres:postgres /var/lib/postgresql/data &&
+            chmod 750 /var/lib/postgresql/data &&
             su -c "exec postgres -c 'config_file=/etc/postgresql/postgresql.conf'" -s /bin/bash postgres
         envFrom:
         - secretRef:
