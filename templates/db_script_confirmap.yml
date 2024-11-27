@@ -12,7 +12,7 @@ data:
     rm -rf /var/lib/postgresql/data/*
 
     #Initialize replication
-    pg_basebackup -h ${POSTGRES_MASTER_HOST} -D /var/lib/postgresql/data -U ${POSTGRES_REPLICATOR_USER} -W ${POSTGRES_REPLICATOR_PASSWORD} --wal-method=stream
+    pg_basebackup -h ${POSTGRES_MASTER_HOST} -D /var/lib/postgresql/data -U ${POSTGRES_REPLICATOR_USER} --password ${POSTGRES_REPLICATOR_PASSWORD} --wal-method=stream
 
     #Configure recovery
     echo "standby_mode = 'on'" > /var/lib/postgresql/data/postgresql.auto.conf
