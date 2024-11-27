@@ -27,15 +27,17 @@ spec:
         command: ["/bin/bash", "-c"]
         args:
           - |
-            echo "host    replication    ${POSTGRES_REPLICATOR_USER}    0.0.0.0/0    md5" > /var/lib/postgresql/data/pg_hba.conf &&
-            cp /script/postgresql.conf /var/lib/postgresql/data/postgresql.conf &&
-            chown postgres:postgres /var/lib/postgresql/data/postgresql.conf &&
-            chmod 600 /var/lib/postgresql/data/postgresql.conf &&
-            chown postgres:postgres /var/lib/postgresql/data/pg_hba.conf &&
-            chmod 600 /var/lib/postgresql/data/pg_hba.conf &&
+            mkdir -p "$(dirname '/etc/postgresql/pg_hba.conf')" &&
+            echo "host    replication    ${POSTGRES_REPLICATOR_USER}    0.0.0.0/0    md5" > /etc/postgresql/pg_hba.conf &&
+            echo "local   all             all                                     trust" >> /etc/postgresql/pg_hba.conf &&
+            cp /script/postgresql.conf /etc/postgresql/postgresql.conf &&
+            chown postgres:postgres /etc/postgresql/postgresql.conf &&
+            chmod 600 /etc/postgresql/postgresql.conf &&
+            chown postgres:postgres /etc/postgresql/pg_hba.conf &&
+            chmod 600 /etc/postgresql/pg_hba.conf &&
             chown -R postgres:postgres /var/lib/postgresql/data &&
             chmod -R 750 /var/lib/postgresql/data &&
-            /docker-entrypoint-initdb.d/init.sh
+            su -c "exec postgres -c 'config_file=/etc/postgresql/postgresql.conf' -f /script2/01--init-create-replicator.sql" -s /bin/bash postgres
         envFrom:
         - secretRef:
             name: "{{ .Values.appName }}-db-secret"
@@ -48,7 +50,7 @@ spec:
             name: database-master-data
           - mountPath: /script
             name: postgres-config-files
-          - mountPath: /docker-entrypoint-initdb.d
+          - mountPath: /script2
             name: init-scripts
       volumes:
         - name: postgres-config-files
