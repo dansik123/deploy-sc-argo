@@ -7,7 +7,7 @@ data:
   01--init-create-replicator.sh: |
     #!/bin/bash
     set -e
-    -- Create the replicator user with replication privileges
+    #Create the replicator user with replication privileges
     psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
       DO $$
       BEGIN
