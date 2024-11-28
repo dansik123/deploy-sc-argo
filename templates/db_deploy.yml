@@ -31,7 +31,7 @@ spec:
             mkdir /script3 &&
             cp /script2/01--init-create-replicator.sh /script3/createReplicator.sh &&
             chmod 644 /script3/createReplicator.sh &&
-            chown postgres:postgres /script3/createReplicator.sql &&
+            chown postgres:postgres /script3/createReplicator.sh &&
             echo "host    replication    ${POSTGRES_REPLICATOR_USER}    0.0.0.0/0    md5" > /etc/postgresql/pg_hba.conf &&
             echo "local   all             all                                     trust" >> /etc/postgresql/pg_hba.conf &&
             cp /script/postgresql.conf /etc/postgresql/postgresql.conf &&
