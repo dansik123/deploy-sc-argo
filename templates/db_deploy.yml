@@ -41,7 +41,7 @@ spec:
             chmod 600 /etc/postgresql/pg_hba.conf &&
             chown -R postgres:postgres /var/lib/postgresql/data &&
             chmod -R 750 /var/lib/postgresql/data &&
-            su -c "exec postgres -c 'config_file=/etc/postgresql/postgresql.conf' && sleep 5 && /script3/createReplicator.sh" -s /bin/bash postgres
+            su -c "exec postgres -c 'config_file=/etc/postgresql/postgresql.conf' & sleep 5 && /script3/createReplicator.sh" -s /bin/bash postgres
         envFrom:
         - secretRef:
             name: "{{ .Values.appName }}-db-secret"
