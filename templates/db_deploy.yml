@@ -105,7 +105,7 @@ spec:
         image: harbor.locallab.ds/library/busybox:1.37-glibc
         command: ["sh", "-c"]
         args:
-          - cp /script/replication-init.sh /scripts/replication-init.sh && chmod +x /scripts/replication-init.sh
+          - cp /script/replication-init.sh /scripts/replication-init.sh && chmod a+x /scripts/replication-init.sh
         volumeMounts:
         - name: script
           mountPath: /script
@@ -130,9 +130,7 @@ spec:
             name: database-replica-data
           - mountPath: /scripts
             name: script-writable
-        command: ["/bin/bash", "-c"]
-        args:
-          - /scripts/replication-init.sh
+        command: ["su", "-c", "'/scripts/replication-init.sh'", "-s", "/bin/bash", "postgres"]
       volumes:
       - name: script
         configMap:

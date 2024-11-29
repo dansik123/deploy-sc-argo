@@ -24,4 +24,4 @@ data:
     echo "recovery_target_timeline = 'latest'" >> /var/lib/postgresql/data/postgresql.auto.conf
 
     #Start PostgreSQL
-    su -c "exec postgres" -s /bin/bash postgres
+    postgres
