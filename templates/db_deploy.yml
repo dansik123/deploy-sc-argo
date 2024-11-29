@@ -130,7 +130,7 @@ spec:
             name: database-replica-data
           - mountPath: /scripts
             name: script-writable
-        command: ["su", "-c", "'/scripts/replication-init.sh'", "-s", "/bin/bash", "postgres"]
+        command: [""/bin/bash"", "-c", "/scripts/replication-init.sh"]
       volumes:
       - name: script
         configMap:
