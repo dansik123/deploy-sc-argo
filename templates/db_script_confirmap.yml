@@ -8,6 +8,9 @@ data:
     #!/bin/bash
     set -e
 
+    #Clear any old data
+    rm -rf /var/lib/postgresql/data/*
+
     echo "${POSTGRES_MASTER_HOST}:5432:*:${POSTGRES_REPLICATOR_USER}:${POSTGRES_REPLICATOR_PASSWORD}" > ~/.pgpass
     chmod 600 ~/.pgpass
     chown postgres:postgres ~/.pgpass
@@ -15,10 +18,15 @@ data:
     #Initialize replication
     pg_basebackup -h ${POSTGRES_MASTER_HOST} -D /var/lib/postgresql/data -U ${POSTGRES_REPLICATOR_USER} --wal-method=stream
 
+    chown -R postgres:postgres /var/lib/postgresql/data 
+    chmod -R 750 /var/lib/postgresql/data 
+    chown -R postgres:postgres /var/lib/postgresql/data/*
+    chmod -R 750 /var/lib/postgresql/data/* 
+
     #Configure recovery
     echo "standby_mode = 'on'" > /var/lib/postgresql/data/postgresql.auto.conf
     echo "primary_conninfo = 'host=${POSTGRES_MASTER_HOST} port=5432 user=${POSTGRES_REPLICATOR_USER} password=${POSTGRES_REPLICATOR_PASSWORD}'" >> /var/lib/postgresql/data/postgresql.auto.conf
     echo "recovery_target_timeline = 'latest'" >> /var/lib/postgresql/data/postgresql.auto.conf
 
     #Start PostgreSQL
-    postgres
+    su -c "exec postgres" -s /bin/bash postgres

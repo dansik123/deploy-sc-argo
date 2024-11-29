@@ -105,14 +105,12 @@ spec:
         image: harbor.locallab.ds/library/busybox:1.37-glibc
         command: ["sh", "-c"]
         args:
-          - cp /script/replication-init.sh /scripts/replication-init.sh && chmod a+x /scripts/replication-init.sh && rm -rf /var/lib/postgresql/data/* && chown -R postgres:postgres /var/lib/postgresql/data && chmod -R 750 /var/lib/postgresql/data
+          - cp /script/replication-init.sh /scripts/replication-init.sh && chmod a+x /scripts/replication-init.sh
         volumeMounts:
         - name: script
           mountPath: /script
         - name: script-writable
           mountPath: /scripts
-        - name: database-replica-data
-          mountPath: {{ .Values.database.storage.volumeTo }}
       containers:
       - name: "{{ .Values.appName }}-database"
         image: "{{ .Values.database.image }}:{{ .Values.database.imageTag }}"
