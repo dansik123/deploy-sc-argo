@@ -111,6 +111,8 @@ spec:
           mountPath: /script
         - name: script-writable
           mountPath: /scripts
+        - name: database-replica-data
+          mountPath: {{ .Values.database.storage.volumeTo }}
       containers:
       - name: "{{ .Values.appName }}-database"
         image: "{{ .Values.database.image }}:{{ .Values.database.imageTag }}"
