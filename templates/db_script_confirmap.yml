@@ -8,9 +8,6 @@ data:
     #!/bin/bash
     set -e
 
-    #Clear any old data
-    rm -rf /var/lib/postgresql/data/*
-
     echo "${POSTGRES_MASTER_HOST}:5432:*:${POSTGRES_REPLICATOR_USER}:${POSTGRES_REPLICATOR_PASSWORD}" > ~/.pgpass
     chmod 600 ~/.pgpass
     chown postgres:postgres ~/.pgpass
