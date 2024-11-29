@@ -43,6 +43,16 @@ spec:
             secretKeyRef:
               name: "{{ .Values.appName }}-db-secret"
               key: POSTGRES_PASSWORD
+        - name: PGPOOL_POSTGRES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.appName }}-db-secret"
+              key: POSTGRES_USER
+        - name: PGPOOL_POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.appName }}-db-secret"
+              key: POSTGRES_PASSWORD
         - name: PGPOOL_ENABLE_LOAD_BALANCING
           value: "yes"
         - name: PGPOOL_HEALTH_CHECK_PERIOD
