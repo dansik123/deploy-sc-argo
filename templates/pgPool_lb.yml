@@ -33,8 +33,18 @@ spec:
             secretKeyRef:
               name: "{{ .Values.appName }}-db-secret"
               key: POSTGRES_PASSWORD
+        - name: PGPOOL_ADMIN_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.appName }}-db-secret"
+              key: POSTGRES_USER
+        - name: PGPOOL_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.appName }}-db-secret"
+              key: POSTGRES_PASSWORD
         - name: PGPOOL_ENABLE_LOAD_BALANCING
-          value: "true"
+          value: "yes"
         - name: PGPOOL_HEALTH_CHECK_PERIOD
           value: "10"
         - name: PGPOOL_HEALTH_CHECK_TIMEOUT
