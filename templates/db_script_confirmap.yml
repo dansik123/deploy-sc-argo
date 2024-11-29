@@ -24,7 +24,7 @@ data:
     chmod -R 750 /var/lib/postgresql/data/* 
 
     #Configure recovery
-    echo "standby_mode = 'on'" > /var/lib/postgresql/data/postgresql.auto.conf
+    touch /var/lib/postgresql/data/standby.signal
     echo "primary_conninfo = 'host=${POSTGRES_MASTER_HOST} port=5432 user=${POSTGRES_REPLICATOR_USER} password=${POSTGRES_REPLICATOR_PASSWORD}'" >> /var/lib/postgresql/data/postgresql.auto.conf
     echo "recovery_target_timeline = 'latest'" >> /var/lib/postgresql/data/postgresql.auto.conf
 
