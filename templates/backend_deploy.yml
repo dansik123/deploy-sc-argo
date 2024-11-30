@@ -39,6 +39,8 @@ spec:
               name: "{{ .Values.appName }}-backend-configmap"
           - secretRef:
               name: "{{ .Values.appName }}-backend-secret"
+          - secretRef:
+              name: "{{ .Values.appName }}-db-secret"
         ports:
           - containerPort: 8080
         volumeMounts:
