@@ -33,6 +33,7 @@ spec:
             echo "local   replication     all                                     trust" >> /etc/postgresql/pg_hba.conf &&
             echo "host    replication     all             127.0.0.1/32            trust" >> /etc/postgresql/pg_hba.conf &&
             echo "host    replication     all             ::1/128                 trust" >> /etc/postgresql/pg_hba.conf &&
+            echo "host all all all scram-sha-256" >> /etc/postgresql/pg_hba.conf &&
             cp /script/postgresql.conf /etc/postgresql/postgresql.conf &&
             chown postgres:postgres /etc/postgresql/postgresql.conf &&
             chmod 600 /etc/postgresql/postgresql.conf &&
