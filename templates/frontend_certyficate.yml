@@ -41,7 +41,7 @@ spec:
   rules:
   - matches:
     - path:
-        type: Prefix
+        type: PathPrefix
         value: "/" # Matches all paths
     backendRefs:
     - name: "{{ .Values.appName }}-frontend-service"
