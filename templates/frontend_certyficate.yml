@@ -11,25 +11,40 @@ spec:
     name: ca-cluster-issuer
     kind: ClusterIssuer
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: Gateway
 metadata:
-  name: "{{ .Values.appName }}-ingress"
+  name: "{{ .Values.appName }}-gateway"
   namespace: "{{ .Values.appName }}-ns"
-  annotations:
 spec:
-  tls:
-  - hosts:
-    - "{{ .Values.frontend.url }}"
-    secretName: "{{ .Values.appName }}-ssl"
+  gatewayClassName: envoy-gateway # Ensure this matches your Envoy Gateway installation
+  listeners:
+  - name: https
+    protocol: HTTPS
+    port: 443
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: "{{ .Values.appName }}-ssl"
+  - name: http
+    protocol: HTTP
+    port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: "{{ .Values.appName }}-frontend-route"
+  namespace: "{{ .Values.appName }}-ns"
+spec:
+  parentRefs:
+  - name: "{{ .Values.appName }}-gateway" # Reference the Gateway defined above
   rules:
-  - host: "{{ .Values.frontend.url }}"
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/"
-        backend:
-          service:
-            name: "{{ .Values.appName }}-frontend-service"
-            port:
-              number: 80
+  - matches:
+    - path:
+        type: Prefix
+        value: "/" # Matches all paths
+    backendRefs:
+    - name: "{{ .Values.appName }}-frontend-service"
+      port: 80
+  hostnames:
+  - "{{ .Values.frontend.url }}"
