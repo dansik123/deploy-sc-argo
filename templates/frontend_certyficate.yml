@@ -17,7 +17,7 @@ metadata:
   name: "{{ .Values.appName }}-gateway"
   namespace: "{{ .Values.appName }}-ns"
 spec:
-  gatewayClassName: envoy-gateway # Ensure this matches your Envoy Gateway installation
+  gatewayClassName: eg # Ensure this matches your Envoy Gateway installation
   listeners:
   - name: https
     protocol: HTTPS
